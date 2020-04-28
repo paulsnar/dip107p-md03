@@ -6,11 +6,13 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
-import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 class MainWindow extends JFrame {
+  private static final long serialVersionUID = -4243166903271524406L;
+
   private StringManager stringManager = new StringManager();
 
   public MainWindow() {
@@ -31,6 +33,14 @@ class MainWindow extends JFrame {
 
       JButton addButton = new JButton("Add");
       addButton.addActionListener((event) -> {
+        String text = input.getText();
+        if (text.trim().length() == 0) {
+          JOptionPane.showMessageDialog(MainWindow.this,
+            "Lūdzu, ievadiet tekstu, lai to šifrētu.",
+            "Nav teksta",
+            JOptionPane.WARNING_MESSAGE);
+          return;
+        }
         stringManager.enqueue(input.getText());
         input.setText("");
       });
@@ -46,7 +56,9 @@ class MainWindow extends JFrame {
     }
 
     JList<String> queueList = new JList<>(stringManager.getQueueListModel());
+    queueList.setFixedCellHeight(15);
     JList<String> resultList = new JList<>(stringManager.getResultsListModel());
+    resultList.setFixedCellHeight(15);
     {
       Container container = new Container();
       container.setLayout(new BoxLayout(container, BoxLayout.X_AXIS));

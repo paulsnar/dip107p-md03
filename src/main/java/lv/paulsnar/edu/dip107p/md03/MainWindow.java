@@ -14,6 +14,7 @@ class MainWindow extends JFrame {
   private static final long serialVersionUID = -4243166903271524406L;
 
   private StringManager stringManager = new StringManager();
+  private JTextField input;
 
   public MainWindow() {
     super("DIP107 MD03");
@@ -24,8 +25,11 @@ class MainWindow extends JFrame {
     BoxLayout layout = new BoxLayout(pane, BoxLayout.Y_AXIS);
     pane.setLayout(layout);
 
-    JTextField input = new JTextField();
+    input = new JTextField();
     add(input);
+    input.addActionListener((event) -> {
+      enqueueInputValue();
+    });
 
     {
       Container container = new Container();
@@ -33,16 +37,7 @@ class MainWindow extends JFrame {
 
       JButton addButton = new JButton("Add");
       addButton.addActionListener((event) -> {
-        String text = input.getText();
-        if (text.trim().length() == 0) {
-          JOptionPane.showMessageDialog(MainWindow.this,
-            "Lūdzu, ievadiet tekstu, lai to šifrētu.",
-            "Nav teksta",
-            JOptionPane.WARNING_MESSAGE);
-          return;
-        }
-        stringManager.enqueue(input.getText());
-        input.setText("");
+        enqueueInputValue();
       });
       container.add(addButton);
 
@@ -98,5 +93,18 @@ class MainWindow extends JFrame {
     pack();
 
     setVisible(true);
+  }
+
+  private void enqueueInputValue() {
+    String text = input.getText();
+    if (text.trim().length() == 0) {
+      JOptionPane.showMessageDialog(MainWindow.this,
+        "Lūdzu, ievadiet tekstu, lai to šifrētu.",
+        "Nav teksta",
+        JOptionPane.WARNING_MESSAGE);
+      return;
+    }
+    stringManager.enqueue(input.getText());
+    input.setText("");
   }
 }
